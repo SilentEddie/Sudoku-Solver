@@ -15,7 +15,7 @@ class SudokuPuzzle {
     char[] bord;
 
     SudokuPuzzle(String PuzzleString) {
-        this.bord = PuzzleString.toCharArray();
+        this.bord = PuzzleString.replace('.', ' ').toCharArray();
     }
     
     public char[] getBord() {
@@ -74,7 +74,7 @@ class SudokuPuzzle {
     
     public char[] getMogelijkeWaarden(int veld){
         String result = "";
-        if (bord[veld] != '.'){
+        if (bord[veld] != ' '){
             return new char[]{bord[veld]};
         }else{
             char[] mogelijkheden = ("123456789").toCharArray();
@@ -87,14 +87,14 @@ class SudokuPuzzle {
     
     public char watIsDeze(int veld){
         //char[] mogelijkheden = new char[];
-        if (bord[veld] != '.'){
+        if (bord[veld] != ' '){
             return bord[veld];
         }else {
             char[] mogelijkheden = getMogelijkeWaarden(veld);
             if (mogelijkheden.length==1){
                 return mogelijkheden[0];
             } else {
-                return '.';
+                return ' ';
             }
             
         }
@@ -131,7 +131,7 @@ class SudokuPuzzle {
         boolean solved = false;
         while (!solved){
             runOnce();
-            solved = (verschil(bord, new char[]{'.'}).length==81);
+            solved = (verschil(bord, new char[]{' '}).length==81);
         }
         System.out.println(toString2());
 

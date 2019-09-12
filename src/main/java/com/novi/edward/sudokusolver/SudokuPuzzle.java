@@ -50,22 +50,23 @@ class SudokuPuzzle {
             }
             answer += "|"+ bord[i];
         }
-        return answer+"|\n|-----------------|";
+        return answer+"|\n|---------------------|";
     }
     
         public String toString4(){
-        String answer = "------------------\n|";
+        String answer = "-----------------------\n| ";
         for (int i =0; i<81; i++){
-            if (i%3==0){
+            if (i>0&&i%3==0){
                 answer+="|";
             }
-            
-            if (i%9==0){
-                answer+="|\n";
+            if (i>0&&i%9==0){
+                answer+="\n| ";
             }
-            answer += " "+ bord[i];
+            answer += ""+ bord[i] + " ";
+            
         }
-        return answer+"|\n-------------------";
+        answer += "|\n---------------------";
+        return answer
     }
         
     public String toString3(){

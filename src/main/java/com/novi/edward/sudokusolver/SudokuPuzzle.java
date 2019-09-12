@@ -42,41 +42,25 @@ class SudokuPuzzle {
         return answer;
     }
     
-    public String toString2(){
-        String answer = "|-----------------";
-        for (int i =0; i<81; i++){
-            if (i%9==0){
-                answer+="|\n";
-            }
-            answer += "|"+ bord[i];
-        }
-        return answer+"|\n|---------------------|";
-    }
-    
-        public String toString4(){
-        String answer = "-------------------------\n| ";
+    public String toString4(){
+        String answer = "┌───────┬───────┬───────┐\n│ ";
         for (int i =0; i<81; i++){
             if (i>0&&i%3==0){
-                answer+="| ";
+                answer+="│ ";
             }
-         
             if (i>0&&i%9==0){
                 if (i>0&&(i/9)%3==0){
-                    answer+="\n|-----------------------|";
+                    answer+="\n├───────┼───────┼───────┤";
                 }
-                answer+="\n| ";
+                answer+="\n│ ";
             }
             answer += ""+ bord[i] + " ";
             
         }
-        answer += "|\n-------------------------";
-        return answer
+        answer += "│\n└───────┴───────┴───────┘";
+        return answer;
     }
         
-    public String toString3(){
-        return new String(bord);
-    }
-    
     public char[] getMogelijkeWaarden(int veld){
         String result = "";
         if (bord[veld] != ' '){

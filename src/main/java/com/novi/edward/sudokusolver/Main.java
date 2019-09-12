@@ -24,7 +24,6 @@ public class Main {
             SudokuPuzzle testPuzzle = new SudokuPuzzle(PuzzleString);
             System.out.println("Deze Puzzel gaat erin");
             System.out.println(testPuzzle.toString4());
-            //System.out.println(testPuzzle.toString2());
             System.out.println("Nu vragen we hem om te solven");
             testPuzzle.solve();
         }

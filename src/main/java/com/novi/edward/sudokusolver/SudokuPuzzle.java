@@ -54,18 +54,22 @@ class SudokuPuzzle {
     }
     
         public String toString4(){
-        String answer = "-----------------------\n| ";
+        String answer = "-------------------------\n| ";
         for (int i =0; i<81; i++){
             if (i>0&&i%3==0){
-                answer+="|";
+                answer+="| ";
             }
+         
             if (i>0&&i%9==0){
+                if (i>0&&(i/9)%3==0){
+                    answer+="\n|-----------------------|";
+                }
                 answer+="\n| ";
             }
             answer += ""+ bord[i] + " ";
             
         }
-        answer += "|\n---------------------";
+        answer += "|\n-------------------------";
         return answer
     }
         
@@ -134,7 +138,7 @@ class SudokuPuzzle {
             runOnce();
             solved = (verschil(bord, new char[]{' '}).length==81);
         }
-        System.out.println(toString2());
+        System.out.println(toString4());
 
         
     }

@@ -1,48 +1,21 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package com.novi.edward.sudokusolver;
 
 import java.util.Arrays;
 
-/**
- *
- * @author edwar
- */
 class SudokuPuzzle {
-    char[] bord;
+    char[] board;
+    
 
-    SudokuPuzzle(String PuzzleString) {
-        this.bord = PuzzleString.replace('.', ' ').toCharArray();
+    SudokuPuzzle(String puzzle) {
+        this.board = puzzle.replace('.', ' ').toCharArray();
     }
     
-    public char[] getBord() {
-        return bord;
-    }
-
-    public void setBord(char[] bord) {
-        this.bord = bord;
-    }
-
-    public SudokuPuzzle(char[] bord) {
-        this.bord = bord;
+    SudokuPuzzle(char[] board) {
+        this.board = board;
     }
     
-    @Override
-    public String toString(){
-        String answer = "";
-        for (int i =0; i<81; i++){
-            if (i%9==0&&i!=0){
-                answer+="\n";
-            }
-            answer += ""+ bord[i];
-        }
-        return answer;
-    }
-    
-    public String toString4(){
+    public String getPuzzleString(){
         String answer = "┌───────┬───────┬───────┐\n│ ";
         for (int i =0; i<81; i++){
             if (i>0&&i%3==0){
@@ -54,120 +27,92 @@ class SudokuPuzzle {
                 }
                 answer+="\n│ ";
             }
-            answer += ""+ bord[i] + " ";
-            
+            answer += ""+ board[i] + " ";
         }
         answer += "│\n└───────┴───────┴───────┘";
         return answer;
     }
         
-    public char[] getMogelijkeWaarden(int veld){
-        String result = "";
-        if (bord[veld] != ' '){
-            return new char[]{bord[veld]};
+    public char[] getPossibleValues(int field){
+        if (board[field] != ' '){
+            return new char[]{board[field]};
         }else{
-            char[] mogelijkheden = ("123456789").toCharArray();
-            mogelijkheden =(verschil(mogelijkheden, getRij(veld)));
-            mogelijkheden =(verschil(mogelijkheden, getKolom(veld)));
-            mogelijkheden =(verschil(mogelijkheden, getVak(veld)));
-            return mogelijkheden;
+            char[] values = ("123456789").toCharArray();
+            values =(difference(values, getRow(field)));
+            values =(difference(values, getColumn(field)));
+            values =(difference(values, getBox(field)));
+            return values;
         }
     }
     
-    public char watIsDeze(int veld){
-        //char[] mogelijkheden = new char[];
-        if (bord[veld] != ' '){
-            return bord[veld];
+    private char newValue(int field){
+        if (board[field] != ' '){
+            return board[field];
         }else {
-            char[] mogelijkheden = getMogelijkeWaarden(veld);
-            if (mogelijkheden.length==1){
-                return mogelijkheden[0];
+            char[] possibillities = getPossibleValues(field);
+            if (possibillities.length==1){
+                return possibillities[0];
             } else {
                 return ' ';
             }
-            
         }
     }
     
     public void runOnce(){
         char[] result = new char[81];
-            for (int i = 0; i<81;i++){
-                result[i] = watIsDeze(i);
-            }
-        bord = result;
-    }
+        for (int i = 0; i<81;i++){
+            board[i] = newValue(i);
+        }
+     }
     
-    private char[] verschil(char[] rij1, char[] rij2){
+    private char[] difference(char[] row1, char[] row2){
         String result = "";
-        for(char teken: rij1){
-            if (!contains(rij2, teken)){
-                result += ""+teken; 
+        for(char row1Char: row1){
+            if (!contains(row2, row1Char)){
+                result += ""+row1Char; 
             }
         }
         return (result.toCharArray());
-
     }
     
-    private boolean contains(char[] rij, char teken){
-        for(char checkTeken: rij){
-            if (checkTeken == teken){
+    private boolean contains(char[] row, char checkChar){
+        for(char rowChar: row){
+            if (rowChar == checkChar){
                 return true;
             }
         }return false;
     }
     
-    public void solve(){
+    public String solve(){
         boolean solved = false;
         while (!solved){
             runOnce();
-            solved = (verschil(bord, new char[]{' '}).length==81);
+            solved = (difference(board, new char[]{' '}).length==81);
         }
-        System.out.println(toString4());
-
-        
+        return getPuzzleString();
     }
     
-    private int getRijNum(int veld){
-        return (veld/9);
-    }
-    
-    private int getKolomNum(int veld){
-        return (veld%9);
-    }
-    
-    private int getVakRij (int veld){
-        return (getRijNum(veld)/3);
+    private char[] getRow(int field) {
+        int start = (field/9)*9;
+        return Arrays.copyOfRange(board, start, start+9);
     }
 
-    private int getVakKolom (int veld){
-        return (getKolomNum(veld)/3);
-    }
-    
-    private char[] getRij(int veld) {
-        int start = (veld/9)*9;
-        return Arrays.copyOfRange(bord, start, start+9);
-    }
-
-    private char[] getKolom(int veld) {
+    private char[] getColumn(int field) {
         String result = "";
-        for (int i = (veld % 9); i <= (veld % 9) + 72; i += 9) {
-            result += "" + bord[i];
+        for (int i = (field % 9); i <= (field % 9) + 72; i += 9) {
+            result += "" + board[i];
         }
         return (result.toCharArray());
     }
     
-    private char[] getVak(int veld){
+    private char[] getBox(int field){
         String result = "";
-        int kolom =(((veld%9)/3)*3);
-        int checkVeld = (veld/27)*27;
+        int column =(((field%9)/3)*3);
+        int checkField = (field/27)*27;
         for (int i= 0; i<3;i++ ){
-            result += new String(Arrays.copyOfRange(getRij(checkVeld), kolom, kolom+3));
-            checkVeld +=9;
+            result += new String(Arrays.copyOfRange(getRow(checkField), column, column+3));
+            checkField +=9;
         }
-
-
         return result.toCharArray();
     }
-
-
 }
